@@ -1,0 +1,36 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    // Disable rules that might be too strict for the current setup
+    "@next/next/no-img-element": "off",
+    "@next/next/no-html-link-for-pages": "off",
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off",
+    "react-hooks/exhaustive-deps": "warn",
+    // Handle unused variables
+    "@typescript-eslint/no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "caughtErrorsIgnorePattern": "^_"
+    }],
+    // Allow empty href attributes in links for now
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["invalidHref", "preferButton"]
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "node_modules",
+    ".next",
+    "out",
+    "build",
+    "dist",
+    "*.pem",
+    "*.tsbuildinfo",
+    "next-env.d.ts"
+  ]
+} 
