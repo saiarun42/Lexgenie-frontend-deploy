@@ -23,13 +23,14 @@ export async function GET() {
     // Verify the token
     let tokenData;
     try {
-      tokenData = JSON.parse(token.value);
-    } catch (e) {
-      return NextResponse.json(
-        { error: 'Invalid token format' },
-        { status: 401 }
-      );
-    }
+  tokenData = JSON.parse(token.value);
+} catch (e) {
+  console.error("Invalid token error:", e);  // ✅ now 'e' is used
+  return NextResponse.json(
+    { error: 'Invalid token format' },
+    { status: 401 }
+  );
+}
     
     // For static auth, just check if the token has the expected structure
     if (!tokenData.userId || !tokenData.email) {

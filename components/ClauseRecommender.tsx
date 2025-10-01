@@ -108,7 +108,7 @@ const ClauseRecommender = () => {
       formData.append("file", file);
 
       // Send the contract_type as a query parameter
-      const url = `http://44.211.157.24:8000/recommend-clauses?contract_type=${encodeURIComponent(contractType)}`;
+      const url = `http://16.171.194.217:80/recommend-clauses?contract_type=${encodeURIComponent(contractType)}`;
 
       const response = await axios.post(
         url,

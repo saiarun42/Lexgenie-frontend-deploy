@@ -189,7 +189,7 @@ const LexCitation: React.FC = () => {
   const { showLoader, hideLoader } = useLoader();
   const { formatResponse } = useTextFormatter();
   // const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
-  const apiUrl = "http://44.211.157.24:8000";
+  const apiUrl = "http://16.171.194.217:80";
   const [showInitialText, setShowInitialText] = useState(true);
 
 

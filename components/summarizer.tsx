@@ -174,7 +174,7 @@ const Summarizer: React.FC = () => {
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch(`http://44.211.157.24:8000/recent-files/${folderName}`);
+      const response = await fetch(`http://16.171.194.217:80/recent-files/${folderName}`);
       if (!response.ok) throw new Error('Failed to fetch history');
       const data = await response.json();
       setHistory(data);
@@ -192,7 +192,7 @@ const Summarizer: React.FC = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch('http://44.211.157.24:8000/text-summarizer/', {
+      const response = await fetch('http://16.171.194.217:80/text-summarizer/', {
         method: 'POST',
         body: formData,
       });

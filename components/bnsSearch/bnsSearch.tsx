@@ -192,7 +192,7 @@ const BnsSearch: React.FC = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await axios.get(`http://44.211.157.24:8000/recent-files/${folderName}`);
+        const res = await axios.get(`http://16.171.194.217:80/recent-files/${folderName}`);
         console.log("History Data:", res.data); // Debugging log
         setChatHistory(res.data);
       } catch (err) {
@@ -224,7 +224,7 @@ const BnsSearch: React.FC = () => {
       const formData = new FormData();
       formData.append("file", files[0]);
 
-      const response = await axios.post("http://44.211.157.24:8000/ipc-classifier", formData);
+      const response = await axios.post("http://16.171.194.217:80/ipc-classifier", formData);
 
       if (!response.data || !response.data.session_id) {
         throw new Error("Session ID not received");
@@ -248,14 +248,14 @@ const BnsSearch: React.FC = () => {
         {
           id: response.data.session_id,
           name: files[0].name,
-          url: `http://44.211.157.24:8000${response.data.view_url}`,
+          url: `http://16.171.194.217:80${response.data.view_url}`,
           content: content
         },
       ]);
       
       // Refresh history after upload
       try {
-        const res = await axios.get(`http://44.211.157.24:8000/recent-files/${folderName}`);
+        const res = await axios.get(`http://16.171.194.217:80/recent-files/${folderName}`);
         setChatHistory(res.data);
       } catch (err) {
         console.error("Failed to refresh history:", err);
@@ -304,7 +304,7 @@ const BnsSearch: React.FC = () => {
 
     try {
       const payload = { user_input: inputValue, session_id: sessionID };
-      const response = await axios.post("http://44.211.157.24:8000/continue-conversation-ipc", payload);
+      const response = await axios.post("http://16.171.194.217:80/continue-conversation-ipc", payload);
       setMessages((prev) => [
         ...prev, 
         { 

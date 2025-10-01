@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef, } from 'react';
 import { Upload, AlertCircle, Check, X, Edit, ChevronDown, ChevronRight } from 'lucide-react';
 import type { NextPage } from 'next';
@@ -115,7 +116,7 @@ const Home: NextPage = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://44.211.157.24:8000/legal-lens', {
+      const response = await fetch('http://16.171.194.217:80/legal-lens', {
         method: 'POST',
         body: formData
       });

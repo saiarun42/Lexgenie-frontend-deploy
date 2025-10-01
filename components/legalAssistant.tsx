@@ -8,7 +8,7 @@ import { useTextFormatter } from "@/context/TextFormatterContext";
 import { useLoader } from "@/context/LoaderContext";
 
 
-const API_BASE_URL = "http://44.211.157.24:8000";
+const API_BASE_URL = "http://16.171.194.217:80";
 
 interface Message {
   text: string;

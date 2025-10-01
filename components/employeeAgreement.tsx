@@ -49,7 +49,7 @@ const employeeForm: React.FC = () => {
   const fetchInitialQuestion = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://44.211.157.24:8000/employeeagreementchat', {
+      const response = await fetch('http://16.171.194.217:80/employeeagreementchat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -104,7 +104,7 @@ const employeeForm: React.FC = () => {
     try {
       setLoading(true);
       
-      const response = await fetch('http://44.211.157.24:8000/employeeagreementprocess_response', {
+      const response = await fetch('http://16.171.194.217:80/employeeagreementprocess_response', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ const employeeForm: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`http://44.211.157.24:8000/download-document/${documentId}`);
+      const response = await fetch(`http://16.171.194.217:80/download-document/${documentId}`);
 
       if (!response.ok) {
         throw new Error("Failed to download document.");

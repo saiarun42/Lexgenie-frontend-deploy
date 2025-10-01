@@ -68,7 +68,7 @@ const LeaseForm: React.FC = () => {
     setMessages((prev) => [...prev, { type: "answer", content: message }]);
 
     try {
-      const response = await fetch("http://44.211.157.24:8000/lease_process_response", {
+      const response = await fetch("http://16.171.194.217:80/lease_process_response", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: message.trim() }),
@@ -102,7 +102,7 @@ const LeaseForm: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`http://44.211.157.24:8000/download-document/${documentId}`);
+      const response = await fetch(`http://16.171.194.217:80/download-document/${documentId}`);
 
       if (!response.ok) {
         throw new Error("Failed to download document.");
