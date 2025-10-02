@@ -126,7 +126,7 @@ const HeadnoteGeneration: React.FC = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await fetch(`http://16.171.194.217:80/recent-files/${folderName}`);
+        const res = await fetch(`http://13.61.2.47:80/recent-files/${folderName}`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
@@ -180,7 +180,7 @@ const HeadnoteGeneration: React.FC = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch('http://16.171.194.217:80/headnote/', {
+      const response = await fetch('http://13.61.2.47:80/headnote/', {
         method: "POST",
         body: formData,
       });

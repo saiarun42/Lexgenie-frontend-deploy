@@ -105,7 +105,7 @@ const Layout: React.FC = () => {
             const formData = new FormData();
             formData.append('file', file);
 
-            const res = await fetch('http://16.171.194.217:80/summarize-contract', {
+            const res = await fetch('http://13.61.2.47:80/summarize-contract', {
                 method: 'POST',
                 body: formData,
             });

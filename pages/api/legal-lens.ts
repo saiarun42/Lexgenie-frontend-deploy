@@ -25,7 +25,7 @@
 
 //     try {
 //       // Call your backend API here
-//       const response = await fetch('http://16.171.194.217:80/legal-lens', {
+//       const response = await fetch('http://13.61.2.47:80/legal-lens', {
 //         method: 'POST',
 //         body: JSON.stringify(files),
 //         headers: {

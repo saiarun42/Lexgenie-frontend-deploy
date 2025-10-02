@@ -102,7 +102,7 @@ const Layout: React.FC = () => {
         setLoading(true); // Start loading
 
         try {
-            const res = await fetch('http://16.171.194.217:80/review-contract', {
+            const res = await fetch('http://13.61.2.47:80/review-contract', {
                 method: 'POST',
                 body: formData,
             });

@@ -102,7 +102,7 @@ const Layout: React.FC = () => {
 
     try {
       // Call Identify Risks API
-      const risksRes = await fetch("http://16.171.194.217:80/identify-risks", {
+      const risksRes = await fetch("http://13.61.2.47:80/identify-risks", {
         method: "POST",
         body: formData,
       });
