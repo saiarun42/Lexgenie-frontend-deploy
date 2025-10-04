@@ -1,5 +1,5 @@
-"use client"
-import React, { Suspense } from 'react';
+"use client";
+import React from 'react';
 import { useSearchParams } from 'next/navigation';
 import LoginForm from '@/components/auth/LoginForm';
 
@@ -9,7 +9,6 @@ const LoginContent = () => {
   
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-black/10">
-      {/* Background Image */}
       <div
         className="absolute inset-0 bg-no-repeat bg-center opacity-10"
         style={{
@@ -22,31 +21,8 @@ const LoginContent = () => {
   );
 };
 
-const LoginPage = () => {
-  return (
-    <Suspense 
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-black/10">
-          <div className="w-full max-w-md p-8">
-            <div className="animate-pulse space-y-6">
-              <div className="h-12 bg-white/20 rounded-lg"></div>
-              <div className="space-y-3">
-                <div className="h-4 bg-white/20 rounded w-3/4"></div>
-                <div className="h-10 bg-white/20 rounded"></div>
-              </div>
-              <div className="space-y-3">
-                <div className="h-4 bg-white/20 rounded w-3/4"></div>
-                <div className="h-10 bg-white/20 rounded"></div>
-              </div>
-              <div className="h-10 bg-white/20 rounded"></div>
-            </div>
-          </div>
-        </div>
-      }
-    >
-      <LoginContent />
-    </Suspense>
-  );
-};
+const LoginPage = () => (
+  <LoginContent />
+);
 
 export default LoginPage;

@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-// Add paths that should be protected (require authentication)
-// 🚨 Removed '/dashboard' from here so it's no longer protected
+// Protected paths including dashboard
 const protectedPaths = [
+  '/dashboard',
   '/contract-generator',
   '/ai-contract-generator',
   '/summarise-contract',
@@ -15,34 +15,28 @@ const protectedPaths = [
   '/bns-search',
   '/summarizer',
   '/profile',
-]
+];
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+  const { pathname } = request.nextUrl;
 
-  // Check if the path is protected
-  const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path))
+  const token = request.cookies.get('auth-token')?.value;
 
-  // Get the token from cookies
-  const token = request.cookies.get('auth-token')?.value
-
-  // If it's a protected path and there's no token, redirect to login
-  if (isProtectedPath && !token) {
-    const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('from', pathname)
-    return NextResponse.redirect(loginUrl)
+  // Redirect unauthenticated user from protected routes
+  if (protectedPaths.some(path => pathname.startsWith(path)) && !token) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('from', pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
-  // If user is logged in and tries to access login/signup pages, redirect to dashboard
+  // Redirect logged-in users away from login/signup
   if (token && (pathname === '/login' || pathname === '/signup')) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
-}
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+};
