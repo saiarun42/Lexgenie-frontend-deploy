@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Add paths that should be protected (require authentication)
+// 🚨 Removed '/dashboard' from here so it's no longer protected
 const protectedPaths = [
   '/contract-generator',
   '/ai-contract-generator',
@@ -14,7 +15,6 @@ const protectedPaths = [
   '/bns-search',
   '/summarizer',
   '/profile',
-  '/dashboard'
 ]
 
 export function middleware(request: NextRequest) {
@@ -43,13 +43,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
-} 
+}
