@@ -12,7 +12,7 @@ export default function Dashboard() {
     // Check if user is authenticated
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/check', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/check`, {
           method: 'GET',
           credentials: 'include', // Important for cookies
         });
