@@ -4,6 +4,7 @@ import { Eye, FileText, Loader, X } from 'lucide-react';
 import Returnpage from './returnpage';
 import { useTextFormatter } from '@/context/TextFormatterContext';
 import Mammoth from 'mammoth';
+import  {v4 as uuidv4} from 'uuid';
 
 // UUID Generator function for cross-browser compatibility
 function generateUUID() {
@@ -150,7 +151,7 @@ const Layout: React.FC = () => {
             }
 
             if (fileUrl) {
-                setDocuments((prevDocs) => [...prevDocs, { id: crypto.randomUUID(), name: file.name, content: fileUrl, file }]);
+                setDocuments((prevDocs) => [...prevDocs, { id: uuidv4(), name: file.name, content: fileUrl, file }]);
             }
         } catch (error) {
             console.error('Error uploading file:', error);

@@ -6,7 +6,7 @@ import { Eye, FileText, Loader, X, } from 'lucide-react';
 import Returnpage from './returnpage';
 import { useTextFormatter } from '@/context/TextFormatterContext';
 import Mammoth from 'mammoth';
-
+import  {v4 as uuidv4} from 'uuid';
 
 // UUID Generator function for cross-browser compatibility
 function generateUUID() {
@@ -138,7 +138,7 @@ const Layout: React.FC = () => {
                 const arrayBuffer = event.target?.result as ArrayBuffer;
                 const { value } = await Mammoth.convertToHtml({ arrayBuffer });
                 // setDocuments((prevDocs) => [...prevDocs, { id: crypto.randomUUID(), name: file.name, content: value, file }]);
-                setDocuments((prevDocs) => [...prevDocs, { id: generateUUID(), name: file.name, content: value, file }]);
+                setDocuments((prevDocs) => [...prevDocs, { id: uuidv4(), name: file.name, content: value, file }]);
               };
 
               reader.readAsArrayBuffer(file);
@@ -151,7 +151,7 @@ const Layout: React.FC = () => {
               reader.onload = (e) => {
                 fileUrl = e.target?.result as string;
                 // setDocuments((prevDocs) => [...prevDocs, { id: crypto.randomUUID(), name: file.name, content: fileUrl, file }]);
-                setDocuments((prevDocs) => [...prevDocs, { id: generateUUID(), name: file.name, content: fileUrl, file }]);
+                setDocuments((prevDocs) => [...prevDocs, { id: uuidv4(), name: file.name, content: fileUrl, file }]);
               };
               reader.readAsText(file);
               return;
@@ -161,7 +161,7 @@ const Layout: React.FC = () => {
             }
     
             if (fileUrl) {
-              setDocuments((prevDocs) => [...prevDocs, { id: crypto.randomUUID(), name: file.name, content: fileUrl, file }]);
+              setDocuments((prevDocs) => [...prevDocs, { id: uuidv4(), name: file.name, content: fileUrl, file }]);
             }
           });
         } catch (error) {
