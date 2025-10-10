@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import { useState, useRef } from "react";
 import axios from "axios";
@@ -8,7 +5,8 @@ import Returnpage from "./returnpage";
 import { useTextFormatter } from "@/context/TextFormatterContext";
 import Mammoth from 'mammoth';
 import { Eye, FileText, X } from "lucide-react";
-import  {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+
 // UUID Generator function for cross-browser compatibility
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -17,11 +15,12 @@ function generateUUID() {
       return v.toString(16);
   });
 }
+
 interface DocumentType {
   id: string;
   name: string;
-  content: string | null; // Changed to string for URL
-  file?: File;  // Added to store the original file
+  content: string | null; 
+  file?: File;  
 }
 
 const DocumentViewer: React.FC<{ documents: DocumentType[]; onClose: () => void }> = ({
@@ -74,6 +73,7 @@ const DocumentViewer: React.FC<{ documents: DocumentType[]; onClose: () => void 
     </div>
   );
 };
+
 const ClauseRecommender = () => {
   const [contractType, setContractType] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -101,101 +101,80 @@ const ClauseRecommender = () => {
 
     setLoading(true);
     setError("");
-    setRecommendedClauses([]); // Clear previous results
+    setRecommendedClauses([]);
 
     try {
-      // Create FormData to send the file and contract type
       const formData = new FormData();
       formData.append("file", file);
 
-      // Send the contract_type as a query parameter
       const url = `http://13.61.2.47:80/recommend-clauses?contract_type=${encodeURIComponent(contractType)}`;
 
-      const response = await axios.post(
-        url,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          },
-        }
-      );
+      const response = await axios.post(url, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
 
-      console.log("API Response:", response.data); // Debugging log
+      console.log("API Response:", response.data);
 
-      // Extract the clause text from the nested response structure
-      if (response.data && response.data.additional_clauses && response.data.additional_clauses.clause) {
-        const clauseText = response.data.additional_clauses.clause;
+      // ✅ Updated clause extraction
+      if (response.data && response.data.additional_clauses) {
+        const clauseText = response.data.additional_clauses;
 
-        // Split the numbered clauses into an array
-        // This regex looks for numbered patterns like "1. ", "2. ", etc.
-        const clausesArray = clauseText
-          .split(/\d+\.\s+\*\*[^*]+\*\*:/)
-          .filter((item: string) => item.trim())
-          .map((item: string) => item.trim());
+        // Split by headings like "## 1.", "## 2.", etc.
+        let clausesArray = clauseText
+          .split(/##\s*\d+\./)
+          .map((item:string) => item.trim())
+          .filter((item:string) => item.length > 0);
 
-        // If the split didn't work as expected or returned empty, 
-        // fall back to splitting by new lines
+        // Fallback: split by double newline if regex didn't work
         if (clausesArray.length === 0) {
-          const fallbackArray = clauseText
-            .split("\n\n")
-            .filter((item: string) => item.trim());
-
-          setRecommendedClauses(fallbackArray);
-        } else {
-          setRecommendedClauses(clausesArray);
+          clausesArray = clauseText.split("\n\n").map((item:string) => item.trim()).filter((item: string) => item);
         }
+
+        setRecommendedClauses(clausesArray);
       } else {
         setError("No clause recommendations were found in the response");
       }
+
+      // ✅ File preview handling
       let fileUrl: string | null = null;
 
-        if (file.type === 'application/pdf') {
-            // Create URL for PDF preview
-            fileUrl = URL.createObjectURL(file);
-        } else if (file.name.endsWith('.docx')) {
-            // Convert DOCX to HTML/Text using Mammoth
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                const arrayBuffer = event.target?.result as ArrayBuffer;
-                const { value } = await Mammoth.convertToHtml({ arrayBuffer });
-                setDocuments((prevDocs) => [...prevDocs, { id: generateUUID(), name: file.name, content: value, file }]);
-            };
-            reader.readAsArrayBuffer(file);
-            return;
-        } else if (file.name.endsWith('.doc')) {
-            alert('DOC files are not supported for direct preview. Please convert to DOCX or PDF.');
-            return;
-        } else if (file.type.startsWith('text/')) {
-            // Handle TXT or plain text files
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                fileUrl = e.target?.result as string;
-                setDocuments((prevDocs) => [...prevDocs, { id: uuidv4(), name: file.name, content: fileUrl, file }]);
-            };
-            reader.readAsText(file);
-            return;
-        } else {
-            alert('Unsupported file format. Please upload a PDF, DOCX, or TXT file.');
-            return;
-        }
+      if (file.type === 'application/pdf') {
+        fileUrl = URL.createObjectURL(file);
+      } else if (file.name.endsWith('.docx')) {
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+          const arrayBuffer = event.target?.result as ArrayBuffer;
+          const { value } = await Mammoth.convertToHtml({ arrayBuffer });
+          setDocuments(prev => [...prev, { id: generateUUID(), name: file.name, content: value, file }]);
+        };
+        reader.readAsArrayBuffer(file);
+        return;
+      } else if (file.name.endsWith('.doc')) {
+        alert('DOC files are not supported for direct preview. Please convert to DOCX or PDF.');
+        return;
+      } else if (file.type.startsWith('text/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          fileUrl = e.target?.result as string;
+          setDocuments(prev => [...prev, { id: uuidv4(), name: file.name, content: fileUrl, file }]);
+        };
+        reader.readAsText(file);
+        return;
+      } else {
+        alert('Unsupported file format. Please upload a PDF, DOCX, or TXT file.');
+        return;
+      }
 
-        if (fileUrl) {
-            setDocuments((prevDocs) => [...prevDocs, { id: uuidv4(), name: file.name, content: fileUrl, file }]);
-        }
+      if (fileUrl) {
+        setDocuments(prev => [...prev, { id: uuidv4(), name: file.name, content: fileUrl, file }]);
+      }
+
     } catch (err: any) {
       console.error("API Error:", err);
 
       if (err.response) {
-        console.error("Response data:", err.response.data);
-        console.error("Response status:", err.response.status);
-
         const errorDetail = err.response.data?.detail || "Failed to fetch recommended clauses.";
-        setError(
-          typeof errorDetail === 'string'
-            ? errorDetail
-            : JSON.stringify(errorDetail)
-        );
+        setError(typeof errorDetail === 'string' ? errorDetail : JSON.stringify(errorDetail));
       } else if (err.request) {
         setError("No response received from server. Please check your connection.");
       } else {
@@ -208,13 +187,11 @@ const ClauseRecommender = () => {
 
   return (
     <div className="w-full mx-auto flex h-screen bg-gray-100 p-6">
-      {/* Left Side - Form (1/5 width) */}
       <div className="w-1/5 bg-white p-4 shadow-lg rounded-lg">
         <Returnpage />
         <h2 className="text-xl font-bold text-gray-800 mb-4">Recommend Clauses</h2>
        
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Contract Type Input */}
           <div>
             <label className="block text-gray-700 font-medium">Contract Type</label>
             <input
@@ -227,7 +204,6 @@ const ClauseRecommender = () => {
             />
           </div>
 
-          {/* File Upload Input */}
           <div>
             <label className="block text-gray-700 font-medium">Upload Contract Document</label>
             <input
@@ -238,12 +214,9 @@ const ClauseRecommender = () => {
               accept=".txt,.doc,.docx,.pdf"
               required
             />
-            <p className="text-xs text-gray-500 mt-1">
-              Supported formats: .txt, .doc, .docx, .pdf
-            </p>
+            <p className="text-xs text-gray-500 mt-1">Supported formats: .txt, .doc, .docx, .pdf</p>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-black text-white py-2 rounded hover:bg-gray-600 transition"
@@ -254,19 +227,18 @@ const ClauseRecommender = () => {
         </form>
       </div>
 
-      {/* Right Side - Response (4/5 width) */}
       <div className="w-4/5 bg-white p-6 ml-6 shadow-lg rounded-lg overflow-y-auto">
         <h3 className="text-2xl font-bold text-gray-800 mb-4">Recommended Clauses</h3>
+
         {documents.length > 0 && (
-                        <button
-                            onClick={() => setShowDocViewer(true)}
-                            className="flex items-center my-2 gap-2 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                        >
-                            <Eye size={16} />
-                            View Documents
-                        </button>
-                    )}
-        {/* Error Message */}
+          <button
+            onClick={() => setShowDocViewer(true)}
+            className="flex items-center my-2 gap-2 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+          >
+            <Eye size={16} /> View Documents
+          </button>
+        )}
+
         {error && (
           <div className="p-4 mb-4 bg-red-50 border-l-4 border-red-500 text-red-700">
             <p className="font-medium">Error:</p>
@@ -274,7 +246,6 @@ const ClauseRecommender = () => {
           </div>
         )}
 
-        {/* Loading Indicator */}
         {loading && (
           <div className="flex items-center justify-center p-8">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -282,34 +253,25 @@ const ClauseRecommender = () => {
           </div>
         )}
 
-        {/* Display Raw Response for Debugging */}
-        {/*
-        <div className="mb-4 p-4 bg-gray-100 rounded text-xs overflow-auto max-h-40">
-          <pre>Debug Response: {JSON.stringify(recommendedClauses, null, 2)}</pre>
-        </div>
-        */}
-
-        {/* Display Recommended Clauses */}
         {!loading && recommendedClauses.length > 0 ? (
           <ul className="space-y-6 text-gray-700">
             {recommendedClauses.map((clause, index) => (
               <li key={index} className="p-4 bg-gray-50 rounded-lg shadow-sm border border-gray-200" style={{ listStyle: "none" }}>
                 <p className="font-bold text-lg text-blue-700 mb-2">Clause {index + 1}</p>
                 <div className="prose max-w-none">
-                  <>{formatResponse(`**${clause.replace(/^\s*:\s*/, '')}**`)}</>
+                  {formatResponse(`**${clause.replace(/^\s*:\s*/, '')}**`)}
                 </div>
               </li>
             ))}
           </ul>
         ) : (
           !loading && !error && (
-            <p className="text-gray-500">
-              Upload a contract document to receive clause recommendations.
-            </p>
+            <p className="text-gray-500">Upload a contract document to receive clause recommendations.</p>
           )
         )}
 
       </div>
+
       {showDocViewer && (
         <DocumentViewer
           documents={documents}
