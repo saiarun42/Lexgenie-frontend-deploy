@@ -115,10 +115,10 @@ const Layout: React.FC = () => {
             if (!res.ok) throw new Error('Failed to upload file');
 
             const data = await res.json();
-            setContractSummary(data.contract_summary);
+            setContractSummary(data.summary);
             setChatMessages((prevMessages) => [
                 ...prevMessages,
-                { text: data.contract_summary, fromUser: false },
+                { text: data.summary, fromUser: false },
             ]);
 
             let fileUrl: string | null = null;

@@ -9,7 +9,8 @@ const formatText = (text: string): string => {
 };
 
 const formatResponse = (response: string) => {
-  const lines = response.split("\n");
+   const lines = response.split('\n');
+
 
   return (
     <div className="response-format space-y-2">
