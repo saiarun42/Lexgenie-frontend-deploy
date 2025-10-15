@@ -52,12 +52,13 @@ export default function SignUp() {
 
       const data = await response.json();
 
+
       if (!response.ok) {
         throw new Error(data.error || 'Something went wrong');
       }
 
       // Redirect to login page on success
-      router.push('/login?registered=true');
+      router.push('/login');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -67,7 +68,7 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-black/10">
-      {/* Background Image */}
+      
       <div
         className="absolute inset-0 bg-no-repeat bg-center opacity-10"
         style={{
@@ -76,9 +77,9 @@ export default function SignUp() {
         }}
       ></div>
 
-      {/* Glassmorphism card */}
+      
       <div className="relative z-10 w-full max-w-md p-8 rounded-lg backdrop-blur-sm bg-white/20 shadow-xl border border-white/30">
-        {/* Logo and title section */}
+        
         <div className="text-center space-y-2 mb-8">
           <div className="flex justify-center">
             <Scale className="h-12 w-12" />
@@ -87,7 +88,7 @@ export default function SignUp() {
           <p className="text-gray-700">Create your account</p>
         </div>
 
-        {/* Error message */}
+        
         {error && (
           <div className={`mb-4 p-3 rounded-md text-center ${
             error.includes('successful') 
@@ -98,9 +99,9 @@ export default function SignUp() {
           </div>
         )}
 
-        {/* Signup form */}
+        
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name field */}
+          
           <div className="space-y-2">
             <label htmlFor="name" className="block text-sm font-medium">
               Full Name
@@ -124,7 +125,7 @@ export default function SignUp() {
             </div>
           </div>
 
-          {/* Email field */}
+          
           <div className="space-y-2">
             <label htmlFor="email" className="block text-sm font-medium">
               Email Address
@@ -148,7 +149,7 @@ export default function SignUp() {
             </div>
           </div>
 
-          {/* Password field */}
+        
           <div className="space-y-2">
             <label htmlFor="password" className="block text-sm font-medium">
               Password
@@ -183,7 +184,7 @@ export default function SignUp() {
             </div>
           </div>
 
-          {/* Confirm Password field */}
+          
           <div className="space-y-2">
             <label htmlFor="confirmPassword" className="block text-sm font-medium">
               Confirm Password
@@ -218,7 +219,7 @@ export default function SignUp() {
             </div>
           </div>
 
-          {/* Submit button */}
+          
           <button
             type="submit"
             disabled={loading}
@@ -231,7 +232,7 @@ export default function SignUp() {
           </button>
         </form>
 
-        {/* Login link */}
+        
         <p className="mt-6 text-center text-sm">
           Already have an account?{' '}
           <Link href="/login" className="font-medium hover:text-gray-200">
